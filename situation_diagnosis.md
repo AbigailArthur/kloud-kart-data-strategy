@@ -1,4 +1,4 @@
-# Data findings-Kloud Kart
+# Situation Diagnosis-Kloud Kart
 
 
 Kloud Kart's main problem is not a lack of advanced technology. It is the lack of a controlled process for collecting, protecting, reconciling and reporting business data.
