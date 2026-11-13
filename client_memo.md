@@ -18,13 +18,16 @@ My review identified five important concerns:
 
 ## What I built
 
+## What I built
+
 | What you asked for | Status | Evidence |
 |---|---|---|
 | Understand the current data challenges | Completed | `situation_diagnosis.md` |
 | Recommend a data architecture | Completed | `recommendation.md` |
 | Provide a 12-month implementation plan | Completed | `roadmap.md` |
 | Document key technical decisions | Completed | Five ADR files in `decisions/` |
-| Improve customer data request tracking | Prototype prepared | Customer data request tracker |
+| Provide a board-level presentation | Completed | `04-board-presentation/Kloud_Kart_Board_Presentation_Final.pptx` |
+| Deliver an improvement beyond the brief | Completed | `improvement/improvement.md` and `improvement/Monday_Reporting_Reconciliation_Template.docx` |
 
 ## What I recommend
 
