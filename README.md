@@ -41,11 +41,11 @@ kloud-kart-data-strategy/
 │   └── ADR-005-hiring-priority.md
 │
 ├── 04-board-presentation/
-│   └── [https://amalitech-my.sharepoint.com/:p:/r/personal/abigail_arthur_amalitech_com/Documents/Kloud_Kart_Board_Presentation_Final.pptx?d=w62ad382d518a4eb5aa590ffabec70939&csf=1&web=1&e=LQMvue]
+│   └── [KLOUD KART BOARD PRESENTATION]
 │
 ├── 05-improvement/
 │   ├── improvement.md
-│   └─[https://amalitech-my.sharepoint.com/:w:/r/personal/abigail_arthur_amalitech_com/Documents/Monday_Reporting_Reconciliation_Template.docx?d=wbfc1e055ddfe4688a925e1d1c5f018dc&csf=1&web=1&e=rxgNs9]
+│   └─[Monday Reporting Reconcilation Template]
 │
 ├── situation_diagnosis.md
 ├── recommendation.md
