@@ -1,122 +1,151 @@
-# Data Strategy Recommendation – Kloud Kart
+# Kloud Kart – Data Strategy Recommendation
 
-**Prepared for:** Kloud Kart Leadership Team  
-**Date:** 12 November 2026
+**Prepared for:** Nana Adjei, Head of Operations  
+**Prepared by:** Abigail Arthur  
+**Date:** 13 November 2026
 
 ## 1. Executive Recommendation
 
-Kloud Kart should first protect its live website, establish reliable business reporting and improve customer data controls.
+Kloud Kart should establish a reliable reporting environment using a second MySQL server (read replica), introduce standard daily reporting, strengthen customer-data controls and recruit two data specialists.
 
-I recommend introducing a second server with a read replica of the existing MySQL database. Reporting activities will run against this copy instead of competing with live customer transactions.
+The immediate priority is to protect the live website and improve confidence in business reports. A full data warehouse or company-wide real-time analytics platform is not justified at this stage.
 
-General business reporting should use daily batch processing. Stock availability must remain live because outdated stock counts could cause overselling.
+This recommendation builds on the existing MySQL environment, addresses the problems identified in the brief and respects the board's limit of two additional hires.
 
-A full data warehouse, data lake or lakehouse is not necessary at this stage. The immediate problems can be addressed with a simpler solution that fits the company's current team, budget and technical capacity.
+## 2. Recommended Architecture
 
-## 2. Proposed Architecture
+### Introduce a MySQL read replica
 
-The recommended arrangement is:
+Kloud Kart should retain its existing MySQL database as the main operational database and introduce a second server that receives a copy of its data.
 
-1. The existing MySQL database continues to support website orders, customers and inventory.
-2. A second server receives a read-only copy of the database.
-3. Scheduled reporting processes use the second server to prepare business reports.
-4. Operations and Finance use shared reporting definitions and outputs.
-5. Nana receives consistent management reports.
+The responsibilities should be divided as follows:
 
-The website must continue checking live inventory against the operational database. Stock availability must not depend on the daily reporting copy.
+**Main operational database**
+- Handles customer orders and transactions.
+- Manages customer accounts.
+- Supports live inventory operations and stock availability.
+- Remains the primary system for day-to-day business activities.
 
-### Why this architecture?
+**Second server – reporting**
+- Receives replicated data from the main database.
+- Handles reporting queries and large exports.
+- Supports daily management reports.
+- Reduces the need to run heavy reporting queries against the live website database.
 
-| Option | Advantage | Why it is not the first choice |
+The Data Engineer should monitor replication delays, server capacity, backups and recovery procedures. Reports should clearly show their last successful refresh time so users understand how current the information is.
+
+Live stock availability must continue using the operational database because stock information cannot become stale. Other management reporting can refresh daily.
+
+### Why a read replica instead of Snowflake or BigQuery?
+
+A cloud data warehouse such as Snowflake or Google BigQuery offers powerful analytical capabilities. However, Kloud Kart's immediate problem is reporting pressure on an existing MySQL database, not an inability to perform advanced analysis across many data sources.
+
+| Consideration | MySQL read replica | Snowflake / BigQuery |
 |---|---|---|
-| Read replica with reporting | Uses existing MySQL knowledge and separates reporting workloads from live transactions | Requires a second server and monitoring |
-| Data warehouse | Provides structured reporting and supports advanced analysis | Adds cost and maintenance before reporting processes are trusted |
-| Data lake | Stores large amounts of raw data for future analysis | Current needs do not justify the additional storage and management |
-| Lakehouse | Supports structured and flexible analytical workloads | Adds complexity and requires skills the current team lacks |
+| Primary purpose | Separates reporting reads from live operations | Provides a separate analytical data platform |
+| Initial complexity | Lower; extends existing MySQL infrastructure | Higher; requires data integration, configuration and platform management |
+| Cost areas | Additional server, storage, backups, monitoring and maintenance | Storage, compute or query usage, data movement, integration and administration |
+| Skills | Builds on existing MySQL knowledge, supported by a Data Engineer | Requires additional cloud data-platform skills |
+| Current suitability | Directly addresses the immediate reporting-performance issue | Provides broader capabilities than the immediate requirements demand |
 
-The read replica is a practical first step, not a permanent limit. A larger platform should be considered when actual reporting needs exceed its capabilities.
+**Financial justification:** A read replica is expected to have a lower initial implementation and operating burden because it extends the existing MySQL environment instead of introducing a separate analytical platform.
 
-## 3. Processing Recommendation
+This is a proportionate starting point, not a claim that a read replica will always be cheaper. Actual costs must be compared using supplier quotations.
 
-**Daily batch processing for general reporting**
+Finance should evaluate:
 
-Daily updates are sufficient for sales summaries, revenue reports, marketing performance and management dashboards. These reports do not require every transaction to appear immediately.
+- **Read replica:** Server or hosting + storage + backups + monitoring + maintenance.
+- **Cloud warehouse:** Storage + compute or query usage + data movement + integration + administration and support.
 
-**Live processing for stock availability**
+The company should obtain comparable quotations before approving the final infrastructure budget.
 
-Stock counts must reflect current transactions to prevent overselling. The website should continue using the live operational inventory data.
+A warehouse should be reconsidered if Kloud Kart begins combining multiple data sources, needs more complex analytics, experiences growing analytical workloads or reaches the limits of the reporting replica.
 
-I do not recommend streaming every business activity simply because investors have requested real-time analytics. It adds monitoring and operating costs without a demonstrated need.
+## 3. Reporting and Data Quality
 
-I would reconsider this decision if evidence shows that delayed information is causing measurable financial or operational harm.
+Introduce a standard daily reporting process using the second server.
 
-## 4. Hiring Plan
+The process should include:
 
-Kloud Kart has funding for two data hires. The recommended order is:
+1. Agree on definitions for key business measures such as orders, revenue and sales.
+2. Document the source and calculation method for each measure.
+3. Schedule daily reporting refreshes.
+4. Check for missing, duplicate or inconsistent records.
+5. Compare Operations and Finance figures using the same reporting definitions.
+6. Record unexplained differences and assign responsibility for resolving them.
 
-### First: Data Engineer
+The Monday management report should use agreed figures rather than relying on separate manual calculations.
 
-**First 90 days:**
-- Assess the current database and reporting workload.
-- Set up the second server and read replica.
-- Move reporting queries away from the live database.
-- Establish replication monitoring, backups and recovery procedures.
-- Introduce the first scheduled reporting process.
+The reporting process should also record refresh times and failed jobs so that Nana can identify when information is incomplete or delayed.
 
-**Expected outcome:** Reporting runs separately from the live website database, with monitoring to detect delays and failures.
+## 4. Customer-Data Management and Protection
 
-### Second: BI and Data Governance Analyst
+Kloud Kart should establish a central register of customer-data exports.
 
-**First 90 days after appointment:**
-- Agree on shared definitions for business measures.
-- Reconcile Operations and Finance reports.
-- Establish consistent management reports.
-- Introduce data-quality checks.
-- Document customer-data exports, access and ownership.
-- Coordinate a documented customer request and deletion process.
+The register should record:
+- Who exported the information.
+- Why it was exported.
+- The date of export.
+- Where the copy is stored.
+- Who can access it.
+- Its retention or review date.
 
-**Expected outcome:** Nana receives consistent reports, and the company has clearer responsibility for customer information.
+The company should also introduce a documented process for customer-data requests. Each request should have an assigned owner, verification record, systems checked, decision, actions taken and completion evidence.
 
-The existing PHP/MySQL developer should support website integration, but should not carry sole responsibility for data operations.
+This process should be reviewed against Ghana's Data Protection Act, 2012 (Act 843), with appropriate legal or privacy advice. The Nigeria pilot should also trigger a review of relevant cross-border data flows and applicable obligations.
 
-## 5. Running Costs
+Not every deletion request should automatically result in every record being erased. Requests must be assessed against applicable data-protection rights and lawful retention requirements.
 
-Exact prices cannot be established without server specifications, supplier quotations and salary information. The company should obtain quotations before approving the operating budget.
+## 5. People and Responsibilities
 
-| Cost area | What the company must budget for |
+The board has approved a limit of two additional data hires. I recommend the following roles:
+
+| Role | Main responsibilities | Why the role is needed |
+|---|---|---|
+| Data Engineer | Set up and maintain the read replica, manage data movement, monitor performance, backups and technical reliability. | Provides dedicated ownership of the data infrastructure and reduces dependence on the existing developer. |
+| BI and Data Governance Analyst | Build reports, define business measures, perform data-quality checks, document reporting processes and support customer-data governance. | Improves reporting consistency, business understanding and accountability for data management. |
+
+The Data Engineer should be recruited first because the reporting environment needs to be established before it can be used reliably. The second role should follow as the reporting and governance processes are introduced.
+
+## 6. Cost, Risks and Controls
+
+Actual GHS costs cannot be confirmed without infrastructure quotations, salary estimates and operational records. The following cost areas should be included in the budget.
+
+| Cost area | What must be priced |
 |---|---|
-| Second server | Computing capacity, memory and storage |
-| Database storage | Replicated data and reporting tables |
-| Backups and recovery | Backup storage and recovery testing |
-| Monitoring | Server health, replication delays and failed reports |
-| Staffing | Two data professionals |
-| Privacy support | Qualified advice on customer data protection |
+| Infrastructure | Second server or hosting, storage and any required network capacity |
+| Reliability | Backups, monitoring, recovery testing and maintenance |
+| Staffing | Recruitment and employment costs for both specialists |
+| Governance | Staff time, privacy advice and customer-data process reviews |
+| Reporting | Initial setup, report development and ongoing support |
 
-**Estimated monthly operating cost structure:**
+### Main implementation risks
 
-Second server + storage + backups + monitoring + two salaries + privacy support.
-
-The first investment should cover the second server and the two approved hires. Avoid committing to a larger analytics platform before there is evidence that it is necessary.
-
-## 6. Risks and Safeguards
-
-| Risk | Safeguard |
+| Risk | Control |
 |---|---|
-| Reporting server falls behind | Monitor replication delays and last successful refresh |
-| Live website remains under pressure | Run reporting queries only against the second server |
-| Departments report different figures | Maintain approved metric definitions |
-| Customer data copies remain uncontrolled | Record exports, owners, access and retention dates |
-| Deletion requests are missed | Track requests, deadlines, actions and completion evidence |
-| Business growth exceeds capacity | Review performance and storage needs quarterly |
+| Replication delay or failure | Monitor replication health, display refresh times and investigate failed updates. |
+| Second server becomes overloaded | Monitor capacity and review workloads as data volumes grow. |
+| Reports still use inconsistent definitions | Maintain an approved metric dictionary and reconciliation process. |
+| Customer-data copies remain untracked | Maintain an export register and review access and retention regularly. |
+| New responsibilities overwhelm the small team | Assign clear ownership and recruit the two recommended specialists. |
 
-The customer-data process must be reviewed against Ghana's Data Protection Act, 2012 (Act 843), with qualified privacy guidance. A tracker alone does not establish compliance.
+The financial benefits should be measured against an initial baseline. Relevant measures include website performance during reporting, staff time spent preparing Monday reports, reporting discrepancies and successful handling of customer-data requests.
 
-## 7. When to Reconsider the Recommendation
+## 7. Decision and Review Conditions
 
-A larger warehouse or lakehouse should be considered when:
-- The reporting server can no longer handle the workload.
-- The business needs to combine data from several additional systems.
-- Daily reporting no longer meets agreed business needs.
-- Reliable historical data supports a clear demand-forecasting business case.
+I recommend that the board:
 
-**Final position:** Protect the live website first, make business reporting consistent, and establish customer-data controls. Invest in more advanced analytics only when business evidence justifies the additional cost.
+1. Approve a second MySQL server for reporting, subject to supplier quotations and technical assessment.
+2. Keep live stock availability and normal transactions on the operational database.
+3. Approve recruitment of a Data Engineer and a BI and Data Governance Analyst.
+4. Introduce daily reporting, shared business definitions and data-quality checks.
+5. Establish customer-data export tracking and a documented request-handling process.
+6. Review progress and infrastructure requirements monthly.
+
+The company should reconsider a full data warehouse when the current architecture can no longer support its reporting requirements, when additional data sources need to be combined or when more advanced analytics becomes a clear business requirement.
+
+## Final Decision
+
+Kloud Kart should begin with a MySQL read replica, daily reporting, stronger customer-data controls and two dedicated data specialists.
+
+This approach addresses the immediate business risks while keeping initial complexity and investment proportionate to the company's current size and capabilities. It also provides a clear path to more advanced data infrastructure when business needs justify it.
