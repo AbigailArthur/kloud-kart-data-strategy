@@ -1,22 +1,22 @@
-# Memo to Nana
+# Memo to Nana Adjei
 
 **From:** Abigail Arthur  
-**Date:** 12 November 2026  
-**Subject:** Improving Kloud Kart's Reporting and Data Management
+**Date:** 13 November 2026  
+**Subject:** Kloud Kart Data Strategy – Findings, Recommendations and Deliverables
 
 ## What I found
 
-Kloud Kart's main challenge is not a lack of advanced technology. It is the way business data is currently collected, shared and managed.
+Kloud Kart's immediate data challenge is not the absence of advanced technology. It is the need to improve how existing business data is managed, accessed, reported and protected.
 
-My review identified five important concerns:
+The assessment identified five main issues:
 
-1. **Website performance:** Reporting exports run on the same database as the live website. These exports have slowed the website twice, creating a risk for customers and daily operations.
-2. **Conflicting reports:** Operations and Finance sometimes report different figures because reporting is rebuilt manually without consistently agreed definitions.
-3. **Uncontrolled customer copies:** Marketing works with customer lists containing approximately 300,000 people, but copies and access are not properly tracked.
-4. **Customer deletion requests:** There is no verified process showing how customer information is located and deleted when requested.
-5. **Limited technical capacity:** The business relies heavily on one PHP/MySQL developer and has no dedicated data engineering team.
+1. **Live website performance:** Reporting exports use the same MySQL database as the live website. The brief confirms that these exports slowed the website twice in the past month.
+2. **Inconsistent reporting:** Operations and Finance produce different figures, while the Monday management report is manually rebuilt.
+3. **Untracked customer-data copies:** Marketing manages approximately 300,000 customer records, but exported copies are not centrally tracked.
+4. **Customer-data requests:** A documented process for investigating, handling and recording customer-data requests has not been evidenced.
+5. **Limited technical capacity:** The company relies on one PHP/MySQL developer and has no dedicated data engineering or governance specialist.
 
-## What I built
+These issues create operational, reporting and customer-data risks as the business grows and prepares for its Nigeria pilot.
 
 ## What I built
 
@@ -31,23 +31,43 @@ My review identified five important concerns:
 
 ## What I recommend
 
-I recommend starting with a second server that receives a copy of the production database. Reporting should run from this separate server so that large exports do not interfere with the live website.
+I recommend introducing a MySQL read replica on a second server to separate reporting activities from the live website database.
 
-Most business reports should refresh daily. Stock availability should remain connected to the live operational system because outdated stock information can lead to incorrect orders.
+The main database should continue handling orders, customer accounts and live inventory operations. General management reporting should use the second server and refresh daily, while live stock availability should continue using current operational data.
 
-I also recommend recruiting a Data Engineer first, followed by a BI and Data Governance Analyst. Together, these roles will improve data reliability, reporting and customer information management.
+I also recommend recruiting two specialists:
 
-The first year should focus on protecting website performance, creating consistent reports, controlling customer data and preparing the business for further growth.
+- **Data Engineer:** To manage the database infrastructure, read replica, data movement, monitoring and backups.
+- **BI and Data Governance Analyst:** To improve reporting, data quality, business definitions and customer-data management.
+
+The company should introduce a standard reporting process, maintain a register of customer-data exports and establish a documented process for handling customer-data requests.
+
+A full data warehouse should be reconsidered when reporting complexity, data sources or analytical workloads grow beyond what the proposed setup can support.
+
+## What it will cost
+
+The main investment areas are the second server, storage, backups, monitoring, maintenance and recruitment of the two specialists.
+
+Actual GHS costs require supplier quotations and salary estimates. I have not presented unverified prices as confirmed costs.
+
+The business impact of the current problems should also be measured. For example, if two staff members each spend three hours per week reconciling reports, that represents an illustrative 312 staff-hours annually. Actual time and labour costs must be confirmed.
+
+The cost of previous website slowdowns should be calculated using incident duration, affected orders, average order value and contribution margin. The available information does not support a verified loss figure.
 
 ## What I could not stand behind
 
-The brief did not include actual database exports, system performance records, report samples or server quotations. Therefore, I could not independently verify:
+The underlying database exports, Operations and Finance reports, system logs and customer-data records were not provided.
 
-- The exact differences between Operations and Finance reports.
-- The current quality and completeness of the database.
-- The locations and number of customer data copies.
-- The financial cost of previous website slowdowns.
-- The current effectiveness of customer deletion procedures.
-- The exact cost of the proposed infrastructure and new hires.
+As a result, I could not verify:
 
-These items should be investigated before final implementation. A privacy professional should also review the company's obligations under Ghana's Data Protection Act, 2012 (Act 843).
+- The exact differences between Operations and Finance figures.
+- The actual financial losses caused by website slowdowns.
+- The number and location of exported customer-data copies.
+- The current effectiveness of customer-data request and deletion procedures.
+- Actual infrastructure and recruitment costs.
+
+These limitations are documented in the situation diagnosis. They should be investigated before final financial commitments or compliance conclusions are made.
+
+## Closing recommendation
+
+Kloud Kart should first protect its live operations, establish reliable reporting and improve customer-data controls. The proposed second server and two specialist hires provide a practical foundation for growth without introducing unnecessary platform complexity too early.
